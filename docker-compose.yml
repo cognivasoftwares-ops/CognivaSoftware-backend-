@@ -1,0 +1,18 @@
+# Optional: run PostgreSQL in Docker instead of installing it locally.
+#   docker compose up -d
+services:
+  postgres:
+    image: postgres:16
+    container_name: cogniva-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: cogniva_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - cogniva_pgdata:/var/lib/postgresql/data
+
+volumes:
+  cogniva_pgdata:

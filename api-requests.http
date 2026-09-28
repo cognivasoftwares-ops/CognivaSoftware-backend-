@@ -1,0 +1,88 @@
+### IntelliJ HTTP Client - open this file and click the green ▶ next to each request.
+@base = http://localhost:8080
+
+### Health
+GET {{base}}/actuator/health
+
+### ---------- PUBLIC ----------
+
+### List services
+GET {{base}}/api/services
+
+### Service by slug
+GET {{base}}/api/services/web-development
+
+### List projects
+GET {{base}}/api/projects
+
+### Project by slug
+GET {{base}}/api/projects/oness-infra-construction-platform
+
+### Submit contact form
+POST {{base}}/api/contact
+Content-Type: application/json
+
+{
+  "fullName": "Jane Doe",
+  "email": "jane@company.com",
+  "phone": "+91 98765 43210",
+  "company": "Acme Pvt Ltd",
+  "projectType": "Web Development",
+  "message": "We need a customer portal built with React and Spring Boot."
+}
+
+### ---------- ADMIN ----------
+
+### Login (copies token into {{token}})
+POST {{base}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@cognivasoftwares.com",
+  "password": "Admin@12345"
+}
+
+> {% client.global.set("token", response.body.accessToken); %}
+
+### Who am I
+GET {{base}}/api/auth/me
+Authorization: Bearer {{token}}
+
+### List enquiries (filter: status=NEW|IN_PROGRESS|CONTACTED|CLOSED|SPAM, q=search text)
+GET {{base}}/api/admin/enquiries?page=0&size=20
+Authorization: Bearer {{token}}
+
+### Enquiry counts by status
+GET {{base}}/api/admin/enquiries/stats
+Authorization: Bearer {{token}}
+
+### Update enquiry status / notes
+PATCH {{base}}/api/admin/enquiries/1
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "status": "CONTACTED",
+  "adminNotes": "Called on Monday, sending proposal."
+}
+
+### All services incl. unpublished
+GET {{base}}/api/admin/services
+Authorization: Bearer {{token}}
+
+### Create a project
+POST {{base}}/api/admin/projects
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "slug": "sample-project",
+  "title": "Sample Project",
+  "industry": "Retail",
+  "description": "A sample case study.",
+  "tags": ["React", "Spring Boot", "PostgreSQL"],
+  "accent": "emerald",
+  "solution": ["Point one", "Point two"],
+  "displayOrder": 90,
+  "published": false
+}

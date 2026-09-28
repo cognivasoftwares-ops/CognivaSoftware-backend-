@@ -1,0 +1,19 @@
+package com.cogniva.backend.catalog.project;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.List;
+import java.util.Optional;
+
+public interface ProjectRepository extends JpaRepository<Project, Long> {
+
+    List<Project> findAllByPublishedTrueOrderByDisplayOrderAscIdAsc();
+
+    List<Project> findAllByOrderByDisplayOrderAscIdAsc();
+
+    Optional<Project> findBySlugAndPublishedTrue(String slug);
+
+    boolean existsBySlug(String slug);
+
+    boolean existsBySlugAndIdNot(String slug, Long id);
+}
